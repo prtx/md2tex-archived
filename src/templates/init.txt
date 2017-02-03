@@ -1,0 +1,10 @@
+\documentclass[FONT_SIZEpt]{DOCUMENT_CLASS}
+\usepackage[margin=.778in]{geometry}
+
+%packages
+
+\begin{document}
+\title{TITLE}
+\author{AUTHOR}\maketitle
+
+\end{document}
