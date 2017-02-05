@@ -2,23 +2,34 @@
 
 import argparse, re, os
 import xml.etree.cElementTree as ET
+from conversions import convert_headers
 
-OUTPUT_DIR = "./samples/"
+OUTPUT_DIR = os.environ.get("DIR") or "./samples/"
+TEMPLATES_DIR = "./templates/"
+
+OUTPUT_DIR = "./tests/test_cases/"
+TEMPLATES_DIR = "./src/templates/"
 	
-def parse_args():
+def parse_args(args=None):
 	
 	"""
 	Function to parse command line arguments
 	
+	:param args: parser arguments
+	:type args: list
 	:return: command line argument information
 	:rtype: argparse.Namespace
 	"""
 
 	parser = argparse.ArgumentParser(description="Convert markdown to LaTeX.")
-	parser.add_argument("document", type=str, help="provide markdown file to convert to LaTeX")
-	parser.add_argument("-n", "--newdocument", action="store_true", help="start new document")
+	parser.add_argument("document", type=str, help="Provide markdown file to convert to LaTeX")
+	parser.add_argument("-n", "--newdocument", action="store_true", help="Start new document")
+	parser.add_argument("-o", "--output", action="store_true", help="Generatee output PDF")
 	parser.add_argument("-c", "--clean", action="store_true", help="generate only pdf and no other files")
 	
+	#if arguments passed as parameters then parse them else not
+	if args:
+		return parser.parse_args(args)
 	return parser.parse_args()
 
 
@@ -41,6 +52,11 @@ def init_project(document):
 	font_size = title = ET.SubElement(root, "font_size").text = input("Font Size(12pt): ") or "12"
 
 	tree.write(OUTPUT_DIR+document+".xml")
+	
+	md_file = open(OUTPUT_DIR+document+".md", "w")
+	md_file.close()
+
+
 
 
 def create_tex_file(document):
@@ -52,7 +68,7 @@ def create_tex_file(document):
 	:type document: str
 	"""
 
-	base_tex_content = open("templates/base.tex").read()
+	base_tex_content = open(TEMPLATES_DIR+"base.tex").read()
 	
 	tree = ET.parse(OUTPUT_DIR+document+".xml")
 	root = tree.getroot()
@@ -71,8 +87,28 @@ def create_tex_file(document):
 	tex_file.write(base_tex_content)
 	tex_file.close()
 
-	md_file = open(OUTPUT_DIR+document+".md", "w")
-	md_file.close()
+
+def convert_markdown(document):
+	
+	"""
+	Convert markdown code to LaTeX.
+	
+	:param document: name of document
+	:type document: str
+	"""
+	
+	mkd = open(OUTPUT_DIR+document+".md").read()
+	
+	mkd = convert_headers(mkd)
+	
+	tex_file = open(OUTPUT_DIR+document+".tex")
+	tex = tex_file.read()
+	tex_file.close()
+	
+	tex_file = open(OUTPUT_DIR+document+".tex", "w")
+	tex = tex.replace("%CONTENTS", mkd)
+	tex_file.write(tex)
+	tex_file.close()
 
 
 def generate_pdf(document, clean):
@@ -91,7 +127,7 @@ def generate_pdf(document, clean):
 		os.system("rm "+document+".aux "+document+".log")
 
 
-def main(args = parse_args()):
+def main(args):
 	
 	"""
 	Main Function. It all started with the big bang. BANG!
@@ -103,10 +139,14 @@ def main(args = parse_args()):
 	# Start new document project
 	if args.newdocument:
 		init_project(args.document)
-		create_tex_file(args.document)
+	
+	create_tex_file(args.document)
+	convert_markdown(args.document)
+
+	if args.output:
 		generate_pdf(args.document, args.clean)
 
 
 
 if __name__=="__main__":
-	main()
+	main(parse_args())

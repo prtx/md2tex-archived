@@ -6,7 +6,7 @@ Contains all funtions to convert markdown codes to LaTeX.
 
 import re
 
-def headers(mkd):
+def convert_headers(mkd):
 	
 	"""
 	Convert header tags (#,##...) to LaTeX section, subsections....
