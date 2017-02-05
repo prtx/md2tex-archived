@@ -4,12 +4,29 @@ import argparse, re, os
 import xml.etree.cElementTree as ET
 
 OUTPUT_DIR = "./samples/"
+	
+def parse_args():
+	
+	"""
+	Function to parse command line arguments
+	
+	:return: command line argument information
+	:rtype: argparse.Namespace
+	"""
+
+	parser = argparse.ArgumentParser(description="Convert markdown to LaTeX.")
+	parser.add_argument("document", type=str, help="provide markdown file to convert to LaTeX")
+	parser.add_argument("-n", "--newdocument", action="store_true", help="start new document")
+	parser.add_argument("-c", "--clean", action="store_true", help="generate only pdf and no other files")
+	
+	return parser.parse_args()
 
 
 def init_project(document):
 	
 	"""
 	Initialize LaTeX document. Reads LaTeX attributes to XML
+	
 	:param document: name of document
 	:type document: str
 	"""
@@ -30,6 +47,7 @@ def create_tex_file(document):
 	
 	"""
 	Create TeX file based on user defined XML attributes.
+	
 	:param document: name of document
 	:type document: str
 	"""
@@ -61,6 +79,7 @@ def generate_pdf(document, clean):
 	
 	"""
 	Generate pdf from TeX file based on user provided attribute.
+	
 	:param document: name of document
 	:type document: str
 	:param clean: argument clean from argparse
@@ -72,22 +91,21 @@ def generate_pdf(document, clean):
 		os.system("rm "+document+".aux "+document+".log")
 
 
-def main():
+def main(args = parse_args()):
 	
 	"""
 	Main Function. It all started with the big bang. BANG!
-	"""
 	
-	parser = argparse.ArgumentParser(description="Convert markdown to LaTeX.")
-	parser.add_argument("-n", "--newdocument", type=str, help="start new document")
-	parser.add_argument("-c", "--clean", action='store_true', help="generate only pdf and no other files")
-	args = parser.parse_args()
+	:paran args: command line argument information
+	:type args: argparse.Namespace
+	"""
 	
 	# Start new document project
 	if args.newdocument:
-		init_project(args.newdocument)
-		create_tex_file(args.newdocument)
-		generate(args.newdocument, args.clean)
+		init_project(args.document)
+		create_tex_file(args.document)
+		generate_pdf(args.document, args.clean)
+
 
 
 if __name__=="__main__":
