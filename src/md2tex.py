@@ -34,7 +34,7 @@ def create_tex_file(document):
 	:type document: str
 	"""
 
-	base_tex_content = open("templates/init.txt").read()
+	base_tex_content = open("templates/base.tex").read()
 	
 	tree = ET.parse(OUTPUT_DIR+document+".xml")
 	root = tree.getroot()
