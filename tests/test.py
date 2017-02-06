@@ -5,7 +5,7 @@ import os, sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import unittest, mock
-from src.conversions import convert_headers
+from src.conversions import convert_headers, convert_bold, convert_italics
 from src.md2tex import main, parse_args
 
 #Set directory for test environment
@@ -27,6 +27,21 @@ class Test_Conversions(unittest.TestCase):
 		mkd = open(TEST_DIR+"sample_header2.md").read()
 		tex = open(TEST_DIR+"sample_header2.tex").read()
 		self.assertEqual(convert_headers(mkd).split(), tex.split())
+
+	
+	def test_bold(self):
+		
+		mkd = open(TEST_DIR+"sample_bold.md").read()
+		tex = open(TEST_DIR+"sample_bold.tex").read()
+		self.assertEqual(convert_bold(mkd).split(), tex.split())
+		
+	
+	def test_italics(self):
+
+		mkd = open(TEST_DIR+"sample_italics.md").read()
+		tex = open(TEST_DIR+"sample_italics.tex").read()
+		self.assertEqual(convert_italics(mkd).split(), tex.split())
+
 
 
 class Integration_Tests(unittest.TestCase):
