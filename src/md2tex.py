@@ -2,7 +2,7 @@
 
 import argparse, re, os
 import xml.etree.cElementTree as ET
-from conversions import convert_headers
+from conversions import convert_headers, convert_links
 
 OUTPUT_DIR = os.environ.get("DIR") or "./samples/"
 TEMPLATES_DIR = "./templates/"
@@ -88,6 +88,29 @@ def create_tex_file(document):
 	tex_file.close()
 
 
+def add_tex_package(document, package, option):
+	
+	"""
+	Add required packages and options to tex file
+	
+	:param document: name of document
+	:type document: str
+	:param package: name of package
+	:type package: str
+	:param option: packag options
+	:type option: str
+	"""
+	
+	package_code ="%packages\n\\usepackage["+option+"]{"+package+"}"
+
+	tex_content = open(OUTPUT_DIR+document+".tex").read()
+	tex_content = tex_content.replace("%packages", package_code)
+	
+	tex_file = open(OUTPUT_DIR+document+".tex", "w")
+	tex_file.write(tex_content)
+	tex_file.close()
+
+
 def convert_markdown(document):
 	
 	"""
@@ -100,6 +123,9 @@ def convert_markdown(document):
 	mkd = open(OUTPUT_DIR+document+".md").read()
 	
 	mkd = convert_headers(mkd)
+	mkd, link_converted = convert_links(mkd)
+	if link_converted:
+		add_tex_package(document, "hyperref", "")
 	
 	tex_file = open(OUTPUT_DIR+document+".tex")
 	tex = tex_file.read()

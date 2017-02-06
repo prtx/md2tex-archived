@@ -66,6 +66,20 @@ class Integration_Tests(unittest.TestCase):
 		tex1 = open(TEST_DIR+SAMPLE_TEST_FILE+".tex").read()
 		tex2 = open(TEST_DIR+"sample_header_integration.tex").read()
 		self.assertEqual(tex1.split(), tex2.split())
+	
+	def test_links(self):
+	
+		#Write markdown content
+		mkd = open(TEST_DIR+SAMPLE_TEST_FILE+".md","w")
+		mkd.write(open(TEST_DIR+"sample_links.md").read())
+		mkd.close()
+
+		#Convert to LaTeX
+		main(parse_args([SAMPLE_TEST_FILE]))
+		
+		tex1 = open(TEST_DIR+SAMPLE_TEST_FILE+".tex").read()
+		tex2 = open(TEST_DIR+"sample_links.tex").read()
+		self.assertEqual(tex1.split(), tex2.split())
 
 
 unittest.main()
