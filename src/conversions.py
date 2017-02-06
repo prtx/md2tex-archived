@@ -18,19 +18,23 @@ def convert_headers(mkd):
 	"""
 	
 	for md_code in re.findall(r"^(#####[^#].*)", mkd, re.M):
-		tex_code = "\subparagraph{" + re.findall(r"#####(.*)", md_code)[0] + "}"
+		tex_code = "\subparagraph{" + re.findall(r"#####(.*)", md_code, re.M)[0] + "}"
 		mkd = mkd.replace(md_code, tex_code)
+
 	for md_code in re.findall(r"^(####[^#].*)", mkd, re.M):
-		tex_code = "\paragraph{" + re.findall(r"####(.*)", md_code)[0] + "}"
+		tex_code = "\paragraph{" + re.findall(r"####(.*)", md_code, re.M)[0] + "}"
 		mkd = mkd.replace(md_code, tex_code)
+
 	for md_code in re.findall(r"^(###[^#].*)", mkd, re.M):
-		tex_code = "\subsubsection{" + re.findall(r"###(.*)", md_code)[0] + "}"
+		tex_code = "\subsubsection{" + re.findall(r"###(.*)", md_code, re.M)[0] + "}"
 		mkd = mkd.replace(md_code, tex_code)
+
 	for md_code in re.findall(r"^(##[^#].*)", mkd, re.M):
-		tex_code = "\subsection{" + re.findall(r"##(.*)", md_code)[0] + "}"
+		tex_code = "\subsection{" + re.findall(r"##(.*)", md_code, re.M)[0] + "}"
 		mkd = mkd.replace(md_code, tex_code)
+
 	for md_code in re.findall(r"^(#[^#].*)", mkd, re.M):
-		tex_code = "\section{" + re.findall(r"#(.*)", md_code)[0] + "}"
+		tex_code = "\section{" + re.findall(r"#(.*)", md_code, re.M)[0] + "}"
 		mkd = mkd.replace(md_code, tex_code)
 
 	return mkd
@@ -47,6 +51,14 @@ def convert_bold(mkd):
 	:rtype: string
 	"""
 	
+	for md_code in re.findall(r"(\*\*.*?\*\*)", mkd, re.M):
+		tex_code = "\\textbf{" + re.findall(r"\*\*(.*?)\*\*", md_code, re.M)[0] + "}"
+		mkd = mkd.replace(md_code, tex_code)
+	
+	for md_code in re.findall(r"(__.*?__)", mkd, re.M):
+		tex_code = "\\textbf{" + re.findall(r"__(.*?)__", md_code, re.M)[0] + "}"
+		mkd = mkd.replace(md_code, tex_code)
+	
 	return mkd
 
 
@@ -61,6 +73,14 @@ def convert_italics(mkd):
 	:rtype: string
 	"""
 	
+	for md_code in re.findall(r"(\*.*?\*)", mkd, re.M):
+		tex_code = "\\textit{" + re.findall(r"\*(.*?)\*", md_code, re.M)[0] + "}"
+		mkd = mkd.replace(md_code, tex_code)
+	
+	for md_code in re.findall(r"(_.*?_)", mkd, re.M):
+		tex_code = "\\textit{" + re.findall(r"_(.*?)_", md_code, re.M)[0] + "}"
+		mkd = mkd.replace(md_code, tex_code)
+
 	return mkd
 
 
@@ -92,5 +112,5 @@ def convert_links(mkd):
 	return mkd
 
 
-mkd = open("../tests/test_cases/sample_bold.md").read()
-print(convert_bold(mkd))
+#mkd = open("../tests/test_cases/sample_bold.md").read()
+#print(convert_bold(mkd))
