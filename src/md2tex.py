@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import argparse, re, os
 import xml.etree.cElementTree as ET
-from conversions import convert_headers, convert_links
+from conversions import convert_headers, convert_links, convert_images
 
 OUTPUT_DIR = os.environ.get("DIR") or "./samples/"
 TEMPLATES_DIR = "./templates/"
@@ -123,10 +123,13 @@ def convert_markdown(document):
 	mkd = open(OUTPUT_DIR+document+".md").read()
 	
 	mkd = convert_headers(mkd)
+	mkd, image_converted = convert_images(mkd)
+	if image_converted:
+		add_tex_package(document, "graphicx", "")
 	mkd, link_converted = convert_links(mkd)
 	if link_converted:
 		add_tex_package(document, "hyperref", "")
-	
+
 	tex_file = open(OUTPUT_DIR+document+".tex")
 	tex = tex_file.read()
 	tex_file.close()

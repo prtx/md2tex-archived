@@ -95,7 +95,19 @@ def convert_images(mkd):
 	:rtype: string
 	"""
 	
-	return mkd
+	md_image_codes = re.findall(r"!\[alt text\]\(.*?\".*?\".*?\)", mkd, re.M)
+	for md_code in md_image_codes:
+		image, caption = re.findall(r"!\[alt text\]\((.*?)\"(.*?)\".*?\)", md_code, re.M)[0]
+		tex_code = "\\begin{figure}[p]\n\centering\n\includegraphics{" + image.strip() + "}\n\caption{" + caption.strip() + "}\n\end{figure}"
+		mkd = mkd.replace(md_code, tex_code)
+	
+	md_image_codes = re.findall(r"!\[alt text\]\(.*?\)", mkd, re.M)
+	for md_code in md_image_codes:
+		image = re.findall(r"!\[alt text\]\((.*?)\)", md_code, re.M)[0]
+		tex_code = "\\begin{figure}[p]\n\centering\n\includegraphics{" + image.strip() + "}\n\end{figure}"
+		mkd = mkd.replace(md_code, tex_code)
+
+	return mkd, bool(md_image_codes)
 
 
 def convert_links(mkd):
@@ -118,5 +130,5 @@ def convert_links(mkd):
 	return mkd, bool(md_link_codes)
 
 
-#mkd = open("../tests/test_cases/sample_links.md").read()
-#print(convert_links(mkd))
+#mkd = open("../tests/test_cases/sample_image.md").read()
+#print(convert_images(mkd))
