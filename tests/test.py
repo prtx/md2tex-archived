@@ -2,15 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
+
+#Set directories for test environment
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+TEST_DIR = "./tests/test_cases/"
+os.environ.setdefault("OUTPUT_DIR", TEST_DIR)
+os.environ.setdefault("TEMPLATE_DIR", "./src/templates/")
 
 import unittest, mock
 from src.conversions import convert_headers, convert_bold, convert_italics
 from src.md2tex import main, parse_args
 
-#Set directory for test environment
-TEST_DIR = "./tests/test_cases/"
-os.environ["DIR"] = TEST_DIR
 
 SAMPLE_TEST_FILE = "test_sample"
 

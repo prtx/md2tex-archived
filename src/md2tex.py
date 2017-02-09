@@ -4,11 +4,9 @@ import argparse, re, os
 import xml.etree.cElementTree as ET
 from conversions import convert_headers, convert_links, convert_images
 
-OUTPUT_DIR = os.environ.get("DIR") or "./samples/"
-TEMPLATES_DIR = "./templates/"
+OUTPUT_DIR = os.environ.get("OUTPUT_DIR") or "./samples/"
+TEMPLATES_DIR = os.environ.get("TEMPLATE_DIR") or "./templates/"
 
-OUTPUT_DIR = "./tests/test_cases/"
-TEMPLATES_DIR = "./src/templates/"
 	
 def parse_args(args=None):
 	

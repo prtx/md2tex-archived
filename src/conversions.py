@@ -95,8 +95,8 @@ def convert_images(mkd):
 	:rtype: string
 	"""
 	
-	md_image_codes = re.findall(r"!\[alt text\]\(.*?\".*?\".*?\)", mkd, re.M)
-	for md_code in md_image_codes:
+	md_image_caption_codes = re.findall(r"!\[alt text\]\(.*?\".*?\".*?\)", mkd, re.M)
+	for md_code in md_image_caption_codes:
 		image, caption = re.findall(r"!\[alt text\]\((.*?)\"(.*?)\".*?\)", md_code, re.M)[0]
 		tex_code = "\\begin{figure}[p]\n\centering\n\includegraphics{" + image.strip() + "}\n\caption{" + caption.strip() + "}\n\end{figure}"
 		mkd = mkd.replace(md_code, tex_code)
@@ -106,8 +106,9 @@ def convert_images(mkd):
 		image = re.findall(r"!\[alt text\]\((.*?)\)", md_code, re.M)[0]
 		tex_code = "\\begin{figure}[p]\n\centering\n\includegraphics{" + image.strip() + "}\n\end{figure}"
 		mkd = mkd.replace(md_code, tex_code)
-
-	return mkd, bool(md_image_codes)
+	
+	#The bool below is to flag if there has been any code to convert. If True, packages need to be added on top of the tex file
+	return mkd, bool(md_image_codes or md_image_caption_codes)
 
 
 def convert_links(mkd):
