@@ -97,5 +97,60 @@ class Integration_Tests(unittest.TestCase):
 		tex2 = open(TEST_DIR+"sample_links.tex").read()
 		self.assertEqual(tex1.split(), tex2.split())
 
+	def test_lists1(self):
+		
+		'''
+		Test unordered lists	
+		'''
+
+		#Write markdown content
+		mkd = open(TEST_DIR+SAMPLE_TEST_FILE+".md","w")
+		mkd.write(open(TEST_DIR+"sample_ul.md").read())
+		mkd.close()
+
+		#Convert to LaTeX
+		main(parse_args([SAMPLE_TEST_FILE]))
+		
+		tex1 = open(TEST_DIR+SAMPLE_TEST_FILE+".tex").read()
+		tex2 = open(TEST_DIR+"sample_ul.tex").read()
+		self.assertEqual(tex1.split(), tex2.split())
+
+	
+	def test_lists2(self):
+		
+		'''
+		Test ordered lists	
+		'''
+
+		#Write markdown content
+		mkd = open(TEST_DIR+SAMPLE_TEST_FILE+".md","w")
+		mkd.write(open(TEST_DIR+"sample_ol.md").read())
+		mkd.close()
+
+		#Convert to LaTeX
+		main(parse_args([SAMPLE_TEST_FILE]))
+		
+		tex1 = open(TEST_DIR+SAMPLE_TEST_FILE+".tex").read()
+		tex2 = open(TEST_DIR+"sample_ol.tex").read()
+		self.assertEqual(tex1.split(), tex2.split())
+
+	def test_lists3(self):
+		
+		'''
+		Test combines unordered and orderd lists	
+		'''
+
+		#Write markdown content
+		mkd = open(TEST_DIR+SAMPLE_TEST_FILE+".md","w")
+		mkd.write(open(TEST_DIR+"sample_list.md").read())
+		mkd.close()
+
+		#Convert to LaTeX
+		main(parse_args([SAMPLE_TEST_FILE]))
+		
+		tex1 = open(TEST_DIR+SAMPLE_TEST_FILE+".tex").read()
+		tex2 = open(TEST_DIR+"sample_list.tex").read()
+		self.assertEqual(tex1.split(), tex2.split())
+
 
 unittest.main()
