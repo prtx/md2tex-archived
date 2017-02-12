@@ -131,5 +131,53 @@ def convert_links(mkd):
 	return mkd, bool(md_link_codes)
 
 
-#mkd = open("../tests/test_cases/sample_image.md").read()
-#print(convert_images(mkd))
+def convert_lists(mkd, tab_level=0):
+	
+	"""
+	Convert markdown lists to LaTeX code. Works recursively to convert lists on current indent level.
+
+	:param mkd: markdown text
+	:type mkd: string
+	:param tab_level: track indentation currently working on
+	:type tab_level: int
+	:return: corresponding LaTeX codes
+	:rtype: string
+	"""
+	
+	#list all unordered list codes for current indent level
+	md_unordered_list_codes = re.findall(r"^\t{"+str(tab_level)+"}[\*\-\+] .+(?:\n\t{"+str(tab_level)+",}[\*|\-|\+] .+)*", mkd, re.M)
+	for md_code in md_unordered_list_codes:
+		
+		#add itemize begin/end block
+		tex_code = "\\begin{itemize}\n" + md_code + "\n\end{itemize}"
+		mkd = mkd.replace(md_code, tex_code)
+
+		#convert each element of list for current indent level
+		md_item_codes = re.findall(r"^\t{"+str(tab_level)+"}[\*\-\+] .*$", md_code, re.M)
+		for md_code in md_item_codes:
+			item = re.findall(r"^\t{"+str(tab_level)+"}[\*\-\+] (.*)$", md_code, re.M)[0]
+			tex_code = "\item " + item
+			mkd = mkd.replace(md_code, tex_code)
+	
+
+	#ordered list conversion works similar to unordered list conversion
+	md_ordered_list_codes = re.findall(r"^\t{"+str(tab_level)+"}[0-9]+\. .+(?:\n\t{"+str(tab_level)+",}[0-9]+\. .+)*", mkd, re.M)
+	for md_code in md_ordered_list_codes:
+		tex_code = "\\begin{enumerate}\n" + md_code + "\n\end{enumerate}"
+		mkd = mkd.replace(md_code, tex_code)
+
+		md_item_codes = re.findall(r"^\t{"+str(tab_level)+"}[0-9]+\. .*$", md_code, re.M)
+		for md_code in md_item_codes:
+			item = re.findall(r"^\t{"+str(tab_level)+"}[0-9]+\. (.*)$", md_code, re.M)[0]
+			tex_code = "\item " + item
+			mkd = mkd.replace(md_code, tex_code)
+
+
+	if md_unordered_list_codes or md_ordered_list_codes:
+		mkd = convert_lists(mkd, tab_level+1)
+	
+	return mkd
+
+
+#mkd = open("../tests/test_cases/sample_ol.md").read()
+#print(convert_lists(mkd))

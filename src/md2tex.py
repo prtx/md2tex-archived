@@ -2,7 +2,7 @@
 
 import argparse, re, os
 import xml.etree.cElementTree as ET
-from conversions import convert_headers, convert_links, convert_images
+from conversions import convert_headers, convert_links, convert_images, convert_lists
 
 OUTPUT_DIR = os.environ.get("OUTPUT_DIR") or "./samples/"
 TEMPLATES_DIR = os.environ.get("TEMPLATE_DIR") or "./templates/"
@@ -121,9 +121,12 @@ def convert_markdown(document):
 	mkd = open(OUTPUT_DIR+document+".md").read()
 	
 	mkd = convert_headers(mkd)
+	mkd = convert_lists(mkd)
+	
 	mkd, image_converted = convert_images(mkd)
 	if image_converted:
 		add_tex_package(document, "graphicx", "")
+	
 	mkd, link_converted = convert_links(mkd)
 	if link_converted:
 		add_tex_package(document, "hyperref", "")

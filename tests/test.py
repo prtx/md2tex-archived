@@ -99,9 +99,9 @@ class Integration_Tests(unittest.TestCase):
 
 	def test_lists1(self):
 		
-		'''
+		"""
 		Test unordered lists	
-		'''
+		"""
 
 		#Write markdown content
 		mkd = open(TEST_DIR+SAMPLE_TEST_FILE+".md","w")
@@ -118,9 +118,9 @@ class Integration_Tests(unittest.TestCase):
 	
 	def test_lists2(self):
 		
-		'''
+		"""
 		Test ordered lists	
-		'''
+		"""
 
 		#Write markdown content
 		mkd = open(TEST_DIR+SAMPLE_TEST_FILE+".md","w")
@@ -136,9 +136,9 @@ class Integration_Tests(unittest.TestCase):
 
 	def test_lists3(self):
 		
-		'''
+		"""
 		Test combines unordered and orderd lists	
-		'''
+		"""
 
 		#Write markdown content
 		mkd = open(TEST_DIR+SAMPLE_TEST_FILE+".md","w")
