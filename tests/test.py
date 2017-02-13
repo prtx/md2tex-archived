@@ -137,7 +137,7 @@ class Integration_Tests(unittest.TestCase):
 	def test_lists3(self):
 		
 		"""
-		Test combines unordered and orderd lists	
+		Test combined unordered and orderd lists	
 		"""
 
 		#Write markdown content
@@ -152,5 +152,22 @@ class Integration_Tests(unittest.TestCase):
 		tex2 = open(TEST_DIR+"sample_list.tex").read()
 		self.assertEqual(tex1.split(), tex2.split())
 
+	def test_tables(self):
+		
+		"""
+		Test tables
+		"""
+
+		#Write markdown content
+		mkd = open(TEST_DIR+SAMPLE_TEST_FILE+".md","w")
+		mkd.write(open(TEST_DIR+"sample_table.md").read())
+		mkd.close()
+
+		#Convert to LaTeX
+		main(parse_args([SAMPLE_TEST_FILE]))
+		
+		tex1 = open(TEST_DIR+SAMPLE_TEST_FILE+".tex").read()
+		tex2 = open(TEST_DIR+"sample_table.tex").read()
+		self.assertEqual(tex1.split(), tex2.split())
 
 unittest.main()

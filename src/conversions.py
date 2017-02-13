@@ -178,6 +178,19 @@ def convert_lists(mkd, tab_level=0):
 	
 	return mkd
 
+def convert_tables(mkd):
+	
+	"""
+	Convert markdown tables to LaTeX code
+
+	:param mkd: markdown text
+	:type mkd: string
+	:return: corresponding LaTeX codes
+	:rtype: string
+	"""
+	
+	#return mkd
+
 
 #mkd = open("../tests/test_cases/sample_ol.md").read()
 #print(convert_lists(mkd))
