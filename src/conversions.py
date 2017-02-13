@@ -178,7 +178,7 @@ def convert_lists(mkd, tab_level=0):
 	
 	return mkd
 
-def convert_tables(mkd):
+def convert_table(mkd):
 	
 	"""
 	Convert markdown tables to LaTeX code
@@ -189,8 +189,23 @@ def convert_tables(mkd):
 	:rtype: string
 	"""
 	
-	#return mkd
+	md_table_codes = re.findall(r".*\|.*\n.*\-.*(?:\n.*\|.*)*", mkd, re.M)
+	for md_code in md_table_codes:
+		
+		md_rows = re.findall(r"(.*\|.*)", md_code, re.M)
+		header = md_rows.pop(0)
+		column_count = md_rows.pop(0).count("-")
+
+		tex_code = "\\begin{tabular}{|"+"l|"*column_count+"}\n\hline\n"
+		tex_code += header.strip(" |").replace("|", "&")+" \\\\\n\hline\n"
+		for row in md_rows:
+			tex_code += row.strip(" |").replace("|", "&")+" \\\\\n"
+		tex_code += "\hline\n\end{tabular}"
+
+		mkd = mkd.replace(md_code, tex_code)
+
+	return mkd
 
 
-#mkd = open("../tests/test_cases/sample_ol.md").read()
-#print(convert_lists(mkd))
+#mkd = open("../tests/test_cases/sample_table.md").read()
+#print(convert_table(mkd))
