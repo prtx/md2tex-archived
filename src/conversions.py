@@ -145,7 +145,7 @@ def convert_lists(mkd, tab_level=0):
 	"""
 	
 	#list all unordered list codes for current indent level
-	md_unordered_list_codes = re.findall(r"^\t{"+str(tab_level)+"}[\*\-\+] .+(?:\n\t{"+str(tab_level)+",}[\*|\-|\+] .+)*", mkd, re.M)
+	md_unordered_list_codes = re.findall(r"^\t{"+str(tab_level)+"}[\*\-\+] .+(?:\n^\t{"+str(tab_level)+",}(?:[\*\-\+]|[0-9]+\.) .+)*", mkd, re.M)
 	for md_code in md_unordered_list_codes:
 		
 		#add itemize begin/end block
@@ -161,7 +161,7 @@ def convert_lists(mkd, tab_level=0):
 	
 
 	#ordered list conversion works similar to unordered list conversion
-	md_ordered_list_codes = re.findall(r"^\t{"+str(tab_level)+"}[0-9]+\. .+(?:\n\t{"+str(tab_level)+",}[0-9]+\. .+)*", mkd, re.M)
+	md_ordered_list_codes = re.findall(r"^\t{"+str(tab_level)+"}[0-9]+\. .+(?:\n^\t{"+str(tab_level)+",}(?:[\*\+\-]|[0-9]+\.) .+)*", mkd, re.M)
 	for md_code in md_ordered_list_codes:
 		tex_code = "\\begin{enumerate}\n" + md_code + "\n\end{enumerate}"
 		mkd = mkd.replace(md_code, tex_code)
@@ -207,5 +207,5 @@ def convert_table(mkd):
 	return mkd
 
 
-#mkd = open("../tests/test_cases/sample_table.md").read()
-#print(convert_table(mkd))
+#mkd = open("../tests/test_cases/sample_list.md").read()
+#print(convert_lists(mkd))
